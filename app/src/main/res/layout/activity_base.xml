@@ -8,3 +8,4 @@
     tools:context=".activities.BaseActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
