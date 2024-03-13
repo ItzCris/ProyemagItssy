@@ -6,7 +6,6 @@ import android.text.TextUtils
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.appcompat.widget.AppCompatEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.example.administradordeproyectos.Firebase.FirestoreClass
