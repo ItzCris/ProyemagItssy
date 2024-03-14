@@ -146,24 +146,31 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     /**
      * A function to setup action bar
      */
+    private val myProfileResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                // Get the user updated details.
+                FirestoreClass().loadUserData(this@MainActivity)
+            } else {
+                Log.e("Cancelled", "Cancelled")
+            }
+        }
+
+    private val createBoardResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                // Get the latest boards list.
+                FirestoreClass().getBoardsList(this@MainActivity)
+            } else {
+                Log.e("Cancelled", "Cancelled")
+            }
+        }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK
-            && requestCode == MY_PROFILE_REQUEST_CODE
-        ) {
-            // Get the user updated details.
-
-            FirestoreClass().loadUserData(this@MainActivity)
-        } else if (resultCode == Activity.RESULT_OK
-            && requestCode == CREATE_BOARD_REQUEST_CODE
-        ) {
-            // Get the latest boards list.
-            FirestoreClass().getBoardsList(this@MainActivity)
-        } else {
-            Log.e("Cancelled", "Cancelled")
-        }
+        // No es necesario implementar este método con el nuevo enfoque.
     }
+
 
     private fun setupActionBar() {
         val toolbar_main_activity : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main_activity)
