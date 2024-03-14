@@ -20,7 +20,6 @@ import com.google.firebase.auth.FirebaseAuth
 import android.content.SharedPreferences
 import android.content.Context
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.administradordeproyectos.adapters.BoardItemsAdapter
@@ -37,7 +36,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
         setupActionBar()
+        // END
 
+        // TODO (Step 8: Assign the NavigationView.OnNavigationItemSelectedListener to navigation view.)
+        // START
         // Assign the NavigationView.OnNavigationItemSelectedListener to navigation view.
         val nav_view : NavigationView = findViewById(R.id.nav_view)
         nav_view.setNavigationItemSelectedListener(this)
@@ -45,33 +47,31 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // Get the current logged in user details.
         FirestoreClass().loadUserData(this@MainActivity)
 
-        mSharedPreferences = this.getSharedPreferences(Constants.PROGEMANAG_PREFERENCES, Context.MODE_PRIVATE)
+        mSharedPreferences =
+            this.getSharedPreferences(Constants.PROGEMANAG_PREFERENCES, Context.MODE_PRIVATE)
 
-        // Variable to check whether the FCM token is updated in the database or not.
+        // Variable is used get the value either token is updated in the database or not.
         val tokenUpdated = mSharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED, false)
 
-        // If the token is already updated, no need to update it every time.
-        if (!tokenUpdated) {
+        // Here if the token is already updated than we don't need to update it every time.
+        if (tokenUpdated) {
+            // Get the current logged in user details.
+            // Show the progress dialog.
+            showProgressDialog(resources.getString(R.string.please_wait))
+            FirestoreClass().loadUserData(this@MainActivity, true)
+        } else {
             FirebaseMessaging.getInstance().token.addOnSuccessListener(this@MainActivity) { token ->
                 updateFCMToken(token)
             }.addOnFailureListener { exception ->
-                Log.e("FCM", "Error getting the token: $exception")
+                Log.e("FCM", "Error al obtener el token: $exception")
             }
         }
-
         val fab_create_board : FloatingActionButton = findViewById(R.id.fab_create_board)
-        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                // Aquí puedes manejar el resultado de la actividad, si es necesario.
-            }
-        }
-
         fab_create_board.setOnClickListener {
             val intent = Intent(this@MainActivity, CreateBoardActivity::class.java)
-            intent.putExtra(Constants.NAME, mUserName)
-            resultLauncher.launch(intent)
+            //intent.putExtra(Constants.NAME)
+            startActivityForResult(intent, CREATE_BOARD_REQUEST_CODE)
         }
-
     }
 
 
@@ -120,7 +120,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         when (menuItem.itemId) {
             R.id.nav_my_profile -> {
 
-                Toast.makeText(this@MainActivity, "My Profile", Toast.LENGTH_SHORT).show()
+                startActivityForResult(
+                    Intent(this@MainActivity, MyProfileActivity::class.java),
+                    MY_PROFILE_REQUEST_CODE
+                )
             }
 
             R.id.nav_sign_out -> {
@@ -146,31 +149,24 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     /**
      * A function to setup action bar
      */
-    private val myProfileResultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                // Get the user updated details.
-                FirestoreClass().loadUserData(this@MainActivity)
-            } else {
-                Log.e("Cancelled", "Cancelled")
-            }
-        }
-
-    private val createBoardResultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                // Get the latest boards list.
-                FirestoreClass().getBoardsList(this@MainActivity)
-            } else {
-                Log.e("Cancelled", "Cancelled")
-            }
-        }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        // No es necesario implementar este método con el nuevo enfoque.
-    }
 
+        if (resultCode == Activity.RESULT_OK
+            && requestCode == MY_PROFILE_REQUEST_CODE
+        ) {
+            // Get the user updated details.
+
+            FirestoreClass().loadUserData(this@MainActivity)
+        } else if (resultCode == Activity.RESULT_OK
+            && requestCode == CREATE_BOARD_REQUEST_CODE
+        ) {
+            // Get the latest boards list.
+            FirestoreClass().getBoardsList(this@MainActivity)
+        } else {
+            Log.e("Cancelled", "Cancelled")
+        }
+    }
 
     private fun setupActionBar() {
         val toolbar_main_activity : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main_activity)
@@ -202,8 +198,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     // END
 
     fun updateNavigationUserDetails(user: User, readBoardsList: Boolean) {
-        // The instance of the header view of the navigation view.
+
+        hideProgressDialog()
+
+        mUserName = user.name
         val nav_view : NavigationView = findViewById(R.id.nav_view)
+        // The instance of the header view of the navigation view.
         val headerView = nav_view.getHeaderView(0)
 
         // The instance of the user image of the navigation view.
@@ -228,6 +228,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             FirestoreClass().getBoardsList(this@MainActivity)
         }
     }
+
     fun populateBoardsListToUI(boardsList: ArrayList<Board>) {
 
         hideProgressDialog()

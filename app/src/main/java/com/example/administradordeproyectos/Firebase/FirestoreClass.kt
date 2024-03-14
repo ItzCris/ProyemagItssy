@@ -117,9 +117,9 @@ class FirestoreClass {
             .document()
             .set(board, SetOptions.merge())
             .addOnSuccessListener {
-                Log.e(activity.javaClass.simpleName, "Board created successfully.")
+                Log.e(activity.javaClass.simpleName, "Proyecto Creado con Exito.")
 
-                Toast.makeText(activity, "Board created successfully.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Proyecto Creado con Exito.", Toast.LENGTH_SHORT).show()
 
                 activity.boardCreatedSuccessfully()
             }
@@ -127,7 +127,7 @@ class FirestoreClass {
                 activity.hideProgressDialog()
                 Log.e(
                     activity.javaClass.simpleName,
-                    "Error while creating a board.",
+                    "Error creando el proyecto.",
                     e
                 )
             }
