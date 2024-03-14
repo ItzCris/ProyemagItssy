@@ -1,15 +1,15 @@
 package com.example.administradordeproyectos.activities
 
+
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
-
-
-
+import androidx.recyclerview.widget.RecyclerView
 import com.example.administradordeproyectos.R
 import com.example.administradordeproyectos.adapters.TaskListItemsAdapter
 import com.example.administradordeproyectos.Firebase.FirestoreClass
@@ -47,7 +47,7 @@ class TaskListActivity : BaseActivity() {
      * A function to setup action bar
      */
     private fun setupActionBar() {
-
+        val toolbar_task_list_activity : Toolbar = findViewById(R.id.toolbar_task_list_activity)
         setSupportActionBar(toolbar_task_list_activity)
 
         val actionBar = supportActionBar
@@ -136,7 +136,7 @@ class TaskListActivity : BaseActivity() {
      */
     fun updateTaskList(position: Int, listName: String, model: Task) {
 
-        val task = Task(listName, model.createdBy)
+        val task = Task(listName, model.createdBy,)
 
         mBoardDetails.taskList[position] = task
         mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1)
@@ -192,7 +192,7 @@ class TaskListActivity : BaseActivity() {
         val task = Task(
             mBoardDetails.taskList[position].title,
             mBoardDetails.taskList[position].createdBy,
-            cardsList
+            cardsList,
         )
 
         mBoardDetails.taskList[position] = task
@@ -224,9 +224,9 @@ class TaskListActivity : BaseActivity() {
         hideProgressDialog()
 
         // Here we are appending an item view for adding a list task list for the board.
-        val addTaskList = Task(resources.getString(R.string.add_list))
+        val addTaskList = Task(resources.getString(R.string.add_list),)
         mBoardDetails.taskList.add(addTaskList)
-
+        val rv_task_list : RecyclerView = findViewById(R.id.rv_task_list)
         rv_task_list.layoutManager =
             LinearLayoutManager(this@TaskListActivity, LinearLayoutManager.HORIZONTAL, false)
         rv_task_list.setHasFixedSize(true)

@@ -1,25 +1,27 @@
 package com.example.administradordeproyectos.model
-
 import android.os.Parcel
 import android.os.Parcelable
 
 data class Task(
     var title: String = "",
     val createdBy: String = "",
-    var cards: ArrayList<Card> = ArrayList()
+    var cards: ArrayList<Card> = ArrayList(),
+    val selected: Boolean = false // Se añade un valor por defecto para 'selected'
 ) : Parcelable {
     constructor(source: Parcel) : this(
         source.readString()!!,
         source.readString()!!,
-        source.createTypedArrayList(Card.CREATOR)!!
+        source.createTypedArrayList(Card.CREATOR) ?: ArrayList(), // Usamos el operador Elvis para manejar el valor nulo
+        source.readByte() != 0.toByte() // Se usa readByte() para leer el valor booleano
     )
 
     override fun describeContents() = 0
 
-    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
-        writeString(title)
-        writeString(createdBy)
-        writeTypedList(cards)
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeString(title)
+        dest.writeString(createdBy)
+        dest.writeTypedList(cards)
+        dest.writeByte(if (selected) 1 else 0) // Se escribe el valor booleano como un byte
     }
 
     companion object {

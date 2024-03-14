@@ -7,7 +7,12 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -37,7 +42,7 @@ class MyProfileActivity : BaseActivity() {
         setupActionBar()
 
         FirestoreClass().loadUserData(this@MyProfileActivity)
-
+        val iv_profile_user_image : ImageView = findViewById(R.id.iv_profile_user_image)
         iv_profile_user_image.setOnClickListener {
 
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -55,7 +60,7 @@ class MyProfileActivity : BaseActivity() {
                 )
             }
         }
-
+        val btn_update : Button = findViewById(R.id.btn_update)
         btn_update.setOnClickListener {
 
             // Here if the image is not selected then update the other details of user.
@@ -73,6 +78,7 @@ class MyProfileActivity : BaseActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val iv_profile_user_image : ImageView = findViewById(R.id.iv_profile_user_image)
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK
                 && requestCode == Constants.PICK_IMAGE_REQUEST_CODE
@@ -127,7 +133,7 @@ class MyProfileActivity : BaseActivity() {
      * A function to setup action bar
      */
     private fun setupActionBar() {
-
+        val toolbar_my_profile_activity : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_my_profile_activity)
         setSupportActionBar(toolbar_my_profile_activity)
 
         val actionBar = supportActionBar
@@ -144,7 +150,10 @@ class MyProfileActivity : BaseActivity() {
      * A function to set the existing details in UI.
      */
     fun setUserDataInUI(user: User) {
-
+        val iv_profile_user_image : ImageView = findViewById(R.id.iv_profile_user_image)
+        val et_name : EditText = findViewById(R.id.et_name)
+        val et_email : EditText = findViewById(R.id.et_email)
+        val et_mobile : EditText = findViewById(R.id.et_mobile)
         // Initialize the user details variable
         mUserDetails = user
 
@@ -215,7 +224,9 @@ class MyProfileActivity : BaseActivity() {
      * A function to update the user profile details into the database.
      */
     private fun updateUserProfileData() {
+        val et_name : EditText = findViewById(R.id.et_name)
 
+        val et_mobile : EditText = findViewById(R.id.et_mobile)
         val userHashMap = HashMap<String, Any>()
 
         if (mProfileImageURL.isNotEmpty() && mProfileImageURL != mUserDetails.image) {

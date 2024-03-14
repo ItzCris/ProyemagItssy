@@ -9,7 +9,12 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.AppCompatEditText
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.administradordeproyectos.R
 import com.example.administradordeproyectos.adapters.MemberListItemsAdapter
 import com.example.administradordeproyectos.Firebase.FirestoreClass
@@ -65,7 +70,7 @@ class MembersActivity : BaseActivity() {
      * A function to setup action bar
      */
     private fun setupActionBar() {
-
+        val toolbar_members_activity : Toolbar = findViewById(R.id.toolbar_members_activity)
         setSupportActionBar(toolbar_members_activity)
 
         val actionBar = supportActionBar
@@ -99,7 +104,7 @@ class MembersActivity : BaseActivity() {
      * A function to setup assigned members list into recyclerview.
      */
     fun setupMembersList(list: ArrayList<User>) {
-
+        val rv_members_list : RecyclerView = findViewById(R.id.rv_members_list)
         mAssignedMembersList = list
 
         hideProgressDialog()
@@ -116,12 +121,15 @@ class MembersActivity : BaseActivity() {
      */
     private fun dialogSearchMember() {
         val dialog = Dialog(this)
-        /*Set the screen content from a layout resource.
-    The resource will be inflated, adding all top-level views to the screen.*/
-        dialog.setContentView(R.layout.dialog_search_member)
-        dialog.tv_add.setOnClickListener(View.OnClickListener {
 
-            val email = dialog.et_email_search_member.text.toString()
+        dialog.setContentView(R.layout.dialog_search_member)
+
+        val tvAdd = dialog.findViewById<TextView>(R.id.tv_add)
+        val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
+        val et_email_search_member = dialog.findViewById<EditText>(R.id.et_email_search_member)
+
+        tvAdd.setOnClickListener { view ->
+            val email = et_email_search_member.text.toString()
 
             if (email.isNotEmpty()) {
                 dialog.dismiss()
@@ -130,15 +138,17 @@ class MembersActivity : BaseActivity() {
                 showProgressDialog(resources.getString(R.string.please_wait))
                 FirestoreClass().getMemberDetails(this@MembersActivity, email)
             } else {
-                showErrorSnackBar("Please enter members email address.")
+                showErrorSnackBar("Please enter member's email address.")
             }
-        })
-        dialog.tv_cancel.setOnClickListener(View.OnClickListener {
+        }
+
+        tvCancel.setOnClickListener { view ->
             dialog.dismiss()
-        })
-        //Start the dialog and display it on screen.
+        }
+
         dialog.show()
     }
+
 
     fun memberDetails(user: User) {
 

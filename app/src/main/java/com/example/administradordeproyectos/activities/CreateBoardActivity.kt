@@ -7,7 +7,10 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -17,6 +20,7 @@ import com.example.administradordeproyectos.R
 import com.example.administradordeproyectos.Firebase.FirestoreClass
 import com.example.administradordeproyectos.model.Board
 import com.example.administradordeproyectos.utils.Constants
+import de.hdodenhof.circleimageview.CircleImageView
 import java.io.IOException
 
 class CreateBoardActivity : BaseActivity() {
@@ -39,7 +43,7 @@ class CreateBoardActivity : BaseActivity() {
         if (intent.hasExtra(Constants.NAME)) {
             mUserName = intent.getStringExtra(Constants.NAME)!!
         }
-
+        val iv_board_image : CircleImageView = findViewById(R.id.iv_board_image)
         iv_board_image.setOnClickListener { view ->
 
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -57,7 +61,7 @@ class CreateBoardActivity : BaseActivity() {
                 )
             }
         }
-
+        val btn_create : Button = findViewById(R.id.btn_create)
         btn_create.setOnClickListener {
 
                 // Here if the image is not selected then update the other details of user.
@@ -104,6 +108,7 @@ class CreateBoardActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        val iv_board_image : CircleImageView = findViewById(R.id.iv_board_image)
         if (resultCode == Activity.RESULT_OK
                 && requestCode == Constants.PICK_IMAGE_REQUEST_CODE
                 && data!!.data != null
@@ -128,7 +133,7 @@ class CreateBoardActivity : BaseActivity() {
      * A function to setup action bar
      */
     private fun setupActionBar() {
-
+        val toolbar_create_board_activity : Toolbar = findViewById(R.id.toolbar_create_board_activity)
         setSupportActionBar(toolbar_create_board_activity)
 
         val actionBar = supportActionBar
@@ -193,7 +198,7 @@ class CreateBoardActivity : BaseActivity() {
         //  This can be modified later on as of now the user itself will be the member of the board.
         val assignedUsersArrayList: ArrayList<String> = ArrayList()
         assignedUsersArrayList.add(getCurrentUserID()) // adding the current user id.
-
+        val et_board_name : TextView = findViewById(R.id.et_board_name)
         // Creating the instance of the Board and adding the values as per parameters.
         val board = Board(
                 et_board_name.text.toString(),

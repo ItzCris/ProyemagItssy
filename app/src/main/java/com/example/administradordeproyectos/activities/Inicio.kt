@@ -63,7 +63,8 @@ class Inicio : BaseActivity() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         // Calling the FirestoreClass signInUser function to get the data of user from database.
-                        FirestoreClass().signInUser(this@Inicio)
+                        val getBoardsList : Boolean
+                        FirestoreClass().loadUserData(this@Inicio)
                     } else {
                         Toast.makeText(
                             this@Inicio,

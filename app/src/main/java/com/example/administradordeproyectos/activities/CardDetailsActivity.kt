@@ -7,16 +7,22 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.administradordeproyectos.R
 import com.example.administradordeproyectos.adapters.CardMemberListItemsAdapter
 import com.example.administradordeproyectos.dialogs.LabelColorListDialog
-import com.example.administradordeproyectos.MembersListDialog
+import com.example.administradordeproyectos.dialogs.MembersListDialog
 import com.example.administradordeproyectos.Firebase.FirestoreClass
 import com.example.administradordeproyectos.model.*
 import com.example.administradordeproyectos.utils.Constants
+import org.w3c.dom.Text
 
 import java.text.SimpleDateFormat
 import java.util.*
@@ -44,7 +50,10 @@ class CardDetailsActivity : BaseActivity() {
         getIntentData()
 
         setupActionBar()
-
+        val et_name_card_details : EditText = findViewById(R.id.et_name_card_details)
+        val tv_select_label_color : TextView = findViewById(R.id.tv_select_label_color)
+        val tv_select_members : TextView = findViewById(R.id.tv_select_members)
+        val tv_select_due_date : TextView = findViewById(R.id.tv_select_due_date)
         et_name_card_details.setText(mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].name)
         et_name_card_details.setSelection(et_name_card_details.text.toString().length) // The cursor after the string length
 
@@ -75,7 +84,7 @@ class CardDetailsActivity : BaseActivity() {
 
             showDataPicker()
         }
-
+        val btn_update_card_details : Button = findViewById(R.id.btn_update_card_details)
         btn_update_card_details.setOnClickListener {
             if (et_name_card_details.text.toString().isNotEmpty()) {
                 updateCardDetails()
@@ -107,7 +116,7 @@ class CardDetailsActivity : BaseActivity() {
      * A function to setup action bar
      */
     private fun setupActionBar() {
-
+        val toolbar_card_details_activity : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_card_details_activity)
         setSupportActionBar(toolbar_card_details_activity)
 
         val actionBar = supportActionBar
@@ -122,6 +131,7 @@ class CardDetailsActivity : BaseActivity() {
 
     // A function to get all the data that is sent through intent.
     private fun getIntentData() {
+        val intent = intent
 
         if (intent.hasExtra(Constants.TASK_LIST_ITEM_POSITION)) {
             mTaskListPosition = intent.getIntExtra(Constants.TASK_LIST_ITEM_POSITION, -1)
@@ -130,13 +140,14 @@ class CardDetailsActivity : BaseActivity() {
             mCardPosition = intent.getIntExtra(Constants.CARD_LIST_ITEM_POSITION, -1)
         }
         if (intent.hasExtra(Constants.BOARD_DETAIL)) {
-            mBoardDetails = intent.getParcelableExtra(Constants.BOARD_DETAIL) as Board
+            mBoardDetails = intent.getParcelableExtra(Constants.BOARD_DETAIL)!! // Corregido
         }
 
         if (intent.hasExtra(Constants.BOARD_MEMBERS_LIST)) {
             mMembersDetailList = intent.getParcelableArrayListExtra(Constants.BOARD_MEMBERS_LIST)!!
         }
     }
+
 
     /**
      * A function to get the result of add or updating the task list.
@@ -153,7 +164,7 @@ class CardDetailsActivity : BaseActivity() {
      * A function to update card details.
      */
     private fun updateCardDetails() {
-
+        val et_name_card_details : EditText = findViewById(R.id.et_name_card_details)
         // Here we have updated the card name using the data model class.
         val card = Card(
             et_name_card_details.text.toString(),
@@ -230,6 +241,7 @@ class CardDetailsActivity : BaseActivity() {
      * A function to remove the text and set the label color to the TextView.
      */
     private fun setColor() {
+        val tv_select_label_color : TextView = findViewById(R.id.tv_select_label_color)
         tv_select_label_color.text = ""
         tv_select_label_color.setBackgroundColor(Color.parseColor(mSelectedColor))
     }
@@ -355,7 +367,8 @@ class CardDetailsActivity : BaseActivity() {
                 }
             }
         }
-
+        val tv_select_members : TextView = findViewById(R.id.tv_select_members)
+        val rv_selected_members_list : RecyclerView = findViewById(R.id.rv_selected_members_list)
         if (selectedMembersList.size > 0) {
 
             // This is for the last item to show.
@@ -399,6 +412,7 @@ class CardDetailsActivity : BaseActivity() {
          * Creates a new date picker dialog for the specified date using the parent
          * context's default date picker dialog theme.
          */
+        val tv_select_due_date : TextView = findViewById(R.id.tv_select_due_date)
         val dpd = DatePickerDialog(
             this,
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
