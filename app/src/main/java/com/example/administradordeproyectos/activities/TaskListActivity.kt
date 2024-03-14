@@ -19,6 +19,7 @@ import com.example.administradordeproyectos.model.Task
 import com.example.administradordeproyectos.model.User
 import com.example.administradordeproyectos.utils.Constants
 
+
 class TaskListActivity : BaseActivity() {
 
     // A global variable for Board Details.
@@ -82,7 +83,7 @@ class TaskListActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK
+        if (resultCode == Activity.RESULT_OK
             && (requestCode == MEMBERS_REQUEST_CODE || requestCode == CARD_DETAILS_REQUEST_CODE)
         ) {
             // Show the progress dialog.
@@ -136,7 +137,7 @@ class TaskListActivity : BaseActivity() {
      */
     fun updateTaskList(position: Int, listName: String, model: Task) {
 
-        val task = Task(listName, model.createdBy,)
+        val task = Task(listName, model.createdBy)
 
         mBoardDetails.taskList[position] = task
         mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1)
@@ -192,7 +193,7 @@ class TaskListActivity : BaseActivity() {
         val task = Task(
             mBoardDetails.taskList[position].title,
             mBoardDetails.taskList[position].createdBy,
-            cardsList,
+            cardsList
         )
 
         mBoardDetails.taskList[position] = task
@@ -224,7 +225,7 @@ class TaskListActivity : BaseActivity() {
         hideProgressDialog()
 
         // Here we are appending an item view for adding a list task list for the board.
-        val addTaskList = Task(resources.getString(R.string.add_list),)
+        val addTaskList = Task(resources.getString(R.string.add_list))
         mBoardDetails.taskList.add(addTaskList)
         val rv_task_list : RecyclerView = findViewById(R.id.rv_task_list)
         rv_task_list.layoutManager =

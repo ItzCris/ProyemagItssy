@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -71,6 +72,26 @@ open class CardMemberListItemsAdapter(
 
             itemView.setOnClickListener {
                 onClickListener?.onClick()
+            }
+            if (position == list.size - 1 && assignMembers) {
+                iv_add_member.visibility = View.VISIBLE
+                iv_selected_member_image.visibility = View.GONE
+            } else {
+                iv_add_member.visibility = View.GONE
+                iv_selected_member_image.visibility = View.VISIBLE
+
+                Glide
+                    .with(context)
+                    .load(model.image)
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_user_place_holder)
+                    .into(iv_selected_member_image)
+            }
+
+            itemView.setOnClickListener {
+                if (onClickListener != null) {
+                    onClickListener!!.onClick()
+                }
             }
         }
     }

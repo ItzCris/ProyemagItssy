@@ -98,7 +98,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // Get the current logged in user details.
         // Show the progress dialog.
         showProgressDialog(resources.getString(R.string.please_wait))
-        FirestoreClass().loadUserData(this@MainActivity, true)
+        FirestoreClass().loadUserData(this@MainActivity, false)
     }
     override fun onBackPressed() {
         super.onBackPressed()

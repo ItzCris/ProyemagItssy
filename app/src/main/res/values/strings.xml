@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">PROJECT MANAGER</string>
 
-    <string name="image_contentDescription">image</string>
-    <string name="let_s_get_started_text">Let\'s Get started</string>
-    <string name="intro_text_description">Collaborate and Plan Together Across Multiple Devices on Projemanag’s Minimalist Interface.</string>
+    <string name="image_contentDescription">Imagen</string>
+    <string name="let_s_get_started_text">Comencemos</string>
+    <string name="intro_text_description">Colabore y planifique juntos en múltiples dispositivos en una interfaz minimalista.</string>
     <string name="sign_in">INICIA SESION</string>
     <string name="sign_up">REGISTRATE</string>
 
@@ -18,42 +18,42 @@
     <string name="please_wait">Por favor espere&#8230;</string>
 
     <string name="nav_my_profile">Mi perfil</string>
-    <string name="nav_sign_out">Serrar Sesion</string>
+    <string name="nav_sign_out">Cerrar Sesión</string>
 
     <string name="mobile">Mobile</string>
     <string name="update">Actualizar</string>
     <string name="my_profile">Mi perfil</string>
 
-    <string name="create_board_title">Crear Tablero</string>
+    <string name="create_board_title">Crear Proyecto</string>
     <string name="create">Crear</string>
-    <string name="board_name">Nombre de la tabla</string>
+    <string name="board_name">Nombre del Proyecto</string>
 
-    <string name="no_boards_are_available">No Boards are available!!!</string>
+    <string name="no_boards_are_available">No hay Proyectos Disponibles!!!</string>
 
-    <string name="action_add_list">Add List</string>
-    <string name="hint_list_name">List Name</string>
-    <string name="action_add_card">Add Card</string>
-    <string name="hint_card_name">Card Name</string>
-    <string name="add_list">Add List</string>
+    <string name="action_add_list">Añadir Lista</string>
+    <string name="hint_list_name">Nombre de la lista</string>
+    <string name="action_add_card">Añadir Tarea</string>
+    <string name="hint_card_name">Nombre de la Tarea</string>
+    <string name="add_list">Añadir Lista</string>
 
-    <string name="members">Members</string>
+    <string name="members">Miembros</string>
 
-    <string name="add_member">Add Member</string>
-    <string name="cancel">CANCEL</string>
-    <string name="add">ADD</string>
-    <string name="search_member">Search Member</string>
+    <string name="add_member">Añadir Miembros</string>
+    <string name="cancel">Cancelar</string>
+    <string name="add">Añadir</string>
+    <string name="search_member">Buscar Miembros</string>
 
-    <string name="label_color">Label Color</string>
-    <string name="select_color">Select Color</string>
-    <string name="select_members">Select Members</string>
+    <string name="label_color">Color de texto</string>
+    <string name="select_color">Seleccionar Color</string>
+    <string name="select_members">Seleccionar miembros</string>
 
-    <string name="due_date">Due Date</string>
-    <string name="select_due_date">Select Due Date</string>
-    <string name="delete_card">Delete Card</string>
+    <string name="due_date">Fecha de Vencimiento</string>
+    <string name="select_due_date">Selecionar Fecha de vencimiento</string>
+    <string name="delete_card">Borrar tarjeta</string>
 
-    <string name="alert">Alert</string>
-    <string name="confirmation_message_to_delete_card">Are you sure you want to delete card \'%1$s\'?</string>
-    <string name="yes">Yes</string>
+    <string name="alert">Alerta</string>
+    <string name="confirmation_message_to_delete_card">Estas Seguro de borrar la tarjeta \'%1$s\'?</string>
+    <string name="yes">Si</string>
     <string name="no">No</string>
 
     <string name="str_select_label_color">Select Label Color</string>
