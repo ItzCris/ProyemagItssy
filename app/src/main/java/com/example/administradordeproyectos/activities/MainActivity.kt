@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 import android.content.SharedPreferences
 import android.content.Context
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.administradordeproyectos.adapters.BoardItemsAdapter
@@ -36,42 +37,41 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
         setupActionBar()
-        // END
 
-        // TODO (Step 8: Assign the NavigationView.OnNavigationItemSelectedListener to navigation view.)
-        // START
         // Assign the NavigationView.OnNavigationItemSelectedListener to navigation view.
         val nav_view : NavigationView = findViewById(R.id.nav_view)
         nav_view.setNavigationItemSelectedListener(this)
 
         // Get the current logged in user details.
         FirestoreClass().loadUserData(this@MainActivity)
-        
-        mSharedPreferences =
-            this.getSharedPreferences(Constants.PROGEMANAG_PREFERENCES, Context.MODE_PRIVATE)
 
-        // Variable is used get the value either token is updated in the database or not.
+        mSharedPreferences = this.getSharedPreferences(Constants.PROGEMANAG_PREFERENCES, Context.MODE_PRIVATE)
+
+        // Variable to check whether the FCM token is updated in the database or not.
         val tokenUpdated = mSharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED, false)
 
-        // Here if the token is already updated than we don't need to update it every time.
-        if (tokenUpdated) {
-            // Get the current logged in user details.
-            // Show the progress dialog.
-            showProgressDialog(resources.getString(R.string.please_wait))
-            FirestoreClass().loadUserData(this@MainActivity, true)
-        } else {
+        // If the token is already updated, no need to update it every time.
+        if (!tokenUpdated) {
             FirebaseMessaging.getInstance().token.addOnSuccessListener(this@MainActivity) { token ->
                 updateFCMToken(token)
             }.addOnFailureListener { exception ->
-                Log.e("FCM", "Error al obtener el token: $exception")
+                Log.e("FCM", "Error getting the token: $exception")
             }
         }
+
         val fab_create_board : FloatingActionButton = findViewById(R.id.fab_create_board)
+        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                // Aquí puedes manejar el resultado de la actividad, si es necesario.
+            }
+        }
+
         fab_create_board.setOnClickListener {
             val intent = Intent(this@MainActivity, CreateBoardActivity::class.java)
             intent.putExtra(Constants.NAME, mUserName)
-            startActivityForResult(intent, CREATE_BOARD_REQUEST_CODE)
+            resultLauncher.launch(intent)
         }
+
     }
 
 
